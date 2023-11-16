@@ -1,4 +1,6 @@
+import 'package:chat_messenger_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../components/my_button.dart';
 import '../components/my_text_field.dart';
@@ -19,8 +21,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
 
   //-------signUp user------------------------
-  void signUp(){
-
+  void signUp()async{
+    if(passwordController.text!=confirmPasswordController.text){
+      ScaffoldMessenger.of(context).showSnackBar(
+         const SnackBar(content: Text("Possword do not "))
+      );
+      return;
+    }
+    final authService=Provider.of<AuthService>(context,listen: false);
+    try{
+       await authService.signInWithEmailandPassword(emailController.text, passwordController.text,);
+    }
+    catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 
   @override
